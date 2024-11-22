@@ -92,7 +92,7 @@ interface CollectionInterface extends Iterator, JsonSerializable, Countable
      * });
      * ```
      *
-     * @param callable $callback the method that will receive each of the elements and
+     * @param callable|null $callback the method that will receive each of the elements and
      *   returns true whether they should be out of the resulting collection.
      *   If left null, a callback that filters out truthy values will be used.
      * @return self
@@ -106,7 +106,7 @@ interface CollectionInterface extends Iterator, JsonSerializable, Countable
      * The callback is passed the value as the first argument and the key as the
      * second argument.
      *
-     * @param callable $callback the method that will receive each of the elements and
+     * @param callable|null $callback the method that will receive each of the elements and
      * returns the value used to determine uniqueness.
      * @return self
      */

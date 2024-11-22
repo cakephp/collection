@@ -115,7 +115,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
             $valuePath,
             $keyPath,
             $spacer,
-            $this->_mode
+            $this->_mode,
         );
     }
 }
