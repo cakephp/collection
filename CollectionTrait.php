@@ -994,6 +994,7 @@ trait CollectionTrait
             return $iterator->unwrap();
         }
 
+        /** @var \Iterator */
         return $iterator;
     }
 
