@@ -44,7 +44,7 @@ interface CollectionInterface extends Iterator, JsonSerializable, Countable
      * @param callable $callback Callback to run for each element in collection.
      * @return $this
      */
-    public function each(callable $callback);
+    public function each(callable $callback): static;
 
     /**
      * Looks through each value in the collection, and returns another collection with
