@@ -68,7 +68,7 @@ trait CollectionTrait
     /**
      * @inheritDoc
      */
-    public function each(callable $callback)
+    public function each(callable $callback): static
     {
         foreach ($this->optimizeUnwrap() as $k => $v) {
             $callback($v, $k);
