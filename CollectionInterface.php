@@ -26,7 +26,9 @@ use const SORT_NUMERIC;
  * list of elements exposing a number of traversing and extracting method for
  * generating other collections.
  *
- * @template-extends \Iterator<mixed>
+ * @template TKey
+ * @template-covariant TValue
+ * @template-extends \Iterator<TKey, TValue>
  */
 interface CollectionInterface extends Iterator, JsonSerializable, Countable
 {
@@ -641,21 +643,21 @@ interface CollectionInterface extends Iterator, JsonSerializable, Countable
      * a property path as accepted by `Collection::extract`, and the value the
      * condition against with each element will be matched
      * @see \Cake\Collection\CollectionInterface::match()
-     * @return mixed
+     * @return TValue|null
      */
     public function firstMatch(array $conditions): mixed;
 
     /**
      * Returns the first result in this collection
      *
-     * @return mixed The first value in the collection will be returned.
+     * @return TValue|null The first value in the collection will be returned.
      */
     public function first(): mixed;
 
     /**
      * Returns the last result in this collection
      *
-     * @return mixed The last value in the collection will be returned.
+     * @return TValue|null The last value in the collection will be returned.
      */
     public function last(): mixed;
 
@@ -802,7 +804,8 @@ interface CollectionInterface extends Iterator, JsonSerializable, Countable
      * collection as the array keys. Keep in mind that it is valid for iterators
      * to return the same key for different elements, setting this value to false
      * can help getting all items if keys are not important in the result.
-     * @return array
+     * @phpstan-return ($keepKeys is true ? array<TKey, TValue> : array<int, TValue>)
+     * @return array<TKey, TValue>|array<int, TValue>
      */
     public function toArray(bool $keepKeys = true): array;
 
@@ -810,7 +813,7 @@ interface CollectionInterface extends Iterator, JsonSerializable, Countable
      * Returns an numerically-indexed array representation of the results.
      * This is equivalent to calling `toArray(false)`
      *
-     * @return array
+     * @return array<int, TValue>
      */
     public function toList(): array;
 
