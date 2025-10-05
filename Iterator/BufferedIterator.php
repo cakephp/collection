@@ -30,28 +30,28 @@ class BufferedIterator extends Collection
      *
      * @var \SplDoublyLinkedList<mixed>
      */
-    protected SplDoublyLinkedList $_buffer;
+    protected SplDoublyLinkedList $buffer;
 
     /**
      * Points to the next record number that should be fetched
      *
      * @var int
      */
-    protected int $_index = 0;
+    protected int $index = 0;
 
     /**
      * Last record fetched from the inner iterator
      *
      * @var mixed
      */
-    protected mixed $_current;
+    protected mixed $current;
 
     /**
      * Last key obtained from the inner iterator
      *
      * @var mixed
      */
-    protected mixed $_key;
+    protected mixed $key;
 
     /**
      * Whether the internal iterator's rewind method was already
@@ -59,14 +59,14 @@ class BufferedIterator extends Collection
      *
      * @var bool
      */
-    protected bool $_started = false;
+    protected bool $started = false;
 
     /**
      * Whether the internal iterator has reached its end.
      *
      * @var bool
      */
-    protected bool $_finished = false;
+    protected bool $finished = false;
 
     /**
      * Maintains an in-memory cache of the results yielded by the internal
@@ -76,7 +76,7 @@ class BufferedIterator extends Collection
      */
     public function __construct(iterable $items)
     {
-        $this->_buffer = new SplDoublyLinkedList();
+        $this->buffer = new SplDoublyLinkedList();
         parent::__construct($items);
     }
 
@@ -87,7 +87,7 @@ class BufferedIterator extends Collection
      */
     public function key(): mixed
     {
-        return $this->_key;
+        return $this->key;
     }
 
     /**
@@ -97,7 +97,7 @@ class BufferedIterator extends Collection
      */
     public function current(): mixed
     {
-        return $this->_current;
+        return $this->current;
     }
 
     /**
@@ -107,14 +107,14 @@ class BufferedIterator extends Collection
      */
     public function rewind(): void
     {
-        if ($this->_index === 0 && !$this->_started) {
-            $this->_started = true;
+        if ($this->index === 0 && !$this->started) {
+            $this->started = true;
             parent::rewind();
 
             return;
         }
 
-        $this->_index = 0;
+        $this->index = 0;
     }
 
     /**
@@ -124,10 +124,10 @@ class BufferedIterator extends Collection
      */
     public function valid(): bool
     {
-        if ($this->_buffer->offsetExists($this->_index)) {
-            $current = $this->_buffer->offsetGet($this->_index);
-            $this->_current = $current['value'];
-            $this->_key = $current['key'];
+        if ($this->buffer->offsetExists($this->index)) {
+            $current = $this->buffer->offsetGet($this->index);
+            $this->current = $current['value'];
+            $this->key = $current['key'];
 
             return true;
         }
@@ -135,15 +135,15 @@ class BufferedIterator extends Collection
         $valid = parent::valid();
 
         if ($valid) {
-            $this->_current = parent::current();
-            $this->_key = parent::key();
-            $this->_buffer->push([
-                'key' => $this->_key,
-                'value' => $this->_current,
+            $this->current = parent::current();
+            $this->key = parent::key();
+            $this->buffer->push([
+                'key' => $this->key,
+                'value' => $this->current,
             ]);
         }
 
-        $this->_finished = !$valid;
+        $this->finished = !$valid;
 
         return $valid;
     }
@@ -155,13 +155,13 @@ class BufferedIterator extends Collection
      */
     public function next(): void
     {
-        $this->_index++;
+        $this->index++;
 
         // Don't move inner iterator if we have more buffer
-        if ($this->_buffer->offsetExists($this->_index)) {
+        if ($this->buffer->offsetExists($this->index)) {
             return;
         }
-        if (!$this->_finished) {
+        if (!$this->finished) {
             parent::next();
         }
     }
@@ -173,7 +173,7 @@ class BufferedIterator extends Collection
      */
     public function count(): int
     {
-        if (!$this->_started) {
+        if (!$this->started) {
             $this->rewind();
         }
 
@@ -181,7 +181,7 @@ class BufferedIterator extends Collection
             $this->next();
         }
 
-        return $this->_buffer->count();
+        return $this->buffer->count();
     }
 
     /**
@@ -191,11 +191,11 @@ class BufferedIterator extends Collection
      */
     public function __serialize(): array
     {
-        if (!$this->_finished) {
+        if (!$this->finished) {
             $this->count();
         }
 
-        return iterator_to_array($this->_buffer);
+        return iterator_to_array($this->buffer);
     }
 
     /**
@@ -209,10 +209,10 @@ class BufferedIterator extends Collection
         $this->__construct([]);
 
         foreach ($data as $value) {
-            $this->_buffer->push($value);
+            $this->buffer->push($value);
         }
 
-        $this->_started = true;
-        $this->_finished = true;
+        $this->started = true;
+        $this->finished = true;
     }
 }

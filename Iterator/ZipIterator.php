@@ -57,14 +57,14 @@ class ZipIterator implements CollectionInterface
      *
      * @var callable|null
      */
-    protected $_callback;
+    protected $callback;
 
     /**
      * Contains the original iterator objects that were attached
      *
      * @var array
      */
-    protected array $_iterators = [];
+    protected array $iterators = [];
 
     /**
      * Creates the iterator to merge together the values by for all the passed
@@ -79,11 +79,11 @@ class ZipIterator implements CollectionInterface
             MultipleIterator::MIT_NEED_ALL | MultipleIterator::MIT_KEYS_NUMERIC,
         );
 
-        $this->_callback = $callable;
+        $this->callback = $callable;
 
         foreach ($sets as $set) {
             $iterator = new Collection($set)->unwrap();
-            $this->_iterators[] = $iterator;
+            $this->iterators[] = $iterator;
             $this->multipleIterator->attachIterator($iterator);
         }
     }
@@ -97,8 +97,8 @@ class ZipIterator implements CollectionInterface
     public function current(): mixed
     {
         $current = $this->multipleIterator->current();
-        if ($this->_callback) {
-            return call_user_func_array($this->_callback, $current);
+        if ($this->callback) {
+            return call_user_func_array($this->callback, $current);
         }
 
         return $current;
@@ -151,7 +151,7 @@ class ZipIterator implements CollectionInterface
      */
     public function __serialize(): array
     {
-        return $this->_iterators;
+        return $this->iterators;
     }
 
     /**
@@ -166,8 +166,8 @@ class ZipIterator implements CollectionInterface
             MultipleIterator::MIT_NEED_ALL | MultipleIterator::MIT_KEYS_NUMERIC,
         );
 
-        $this->_iterators = $data;
-        foreach ($this->_iterators as $it) {
+        $this->iterators = $data;
+        foreach ($this->iterators as $it) {
             $this->multipleIterator->attachIterator($it);
         }
     }

@@ -31,14 +31,14 @@ class InsertIterator extends Collection
      *
      * @var \Cake\Collection\Collection
      */
-    protected Collection $_values;
+    protected Collection $values;
 
     /**
      * Holds whether the values collection is still valid. (has more records)
      *
      * @var bool
      */
-    protected bool $_validValues = true;
+    protected bool $validValues = true;
 
     /**
      * An array containing each of the properties to be traversed to reach the
@@ -46,14 +46,14 @@ class InsertIterator extends Collection
      *
      * @var array<string>
      */
-    protected array $_path;
+    protected array $path;
 
     /**
      * The property name to which values will be assigned
      *
      * @var string
      */
-    protected string $_target;
+    protected string $target;
 
     /**
      * Constructs a new collection that will dynamically add properties to it out of
@@ -76,9 +76,9 @@ class InsertIterator extends Collection
 
         $path = explode('.', $path);
         $target = array_pop($path);
-        $this->_path = $path;
-        $this->_target = $target;
-        $this->_values = $values;
+        $this->path = $path;
+        $this->target = $target;
+        $this->values = $values;
     }
 
     /**
@@ -89,10 +89,10 @@ class InsertIterator extends Collection
     public function next(): void
     {
         parent::next();
-        if ($this->_validValues) {
-            $this->_values->next();
+        if ($this->validValues) {
+            $this->values->next();
         }
-        $this->_validValues = $this->_values->valid();
+        $this->validValues = $this->values->valid();
     }
 
     /**
@@ -105,19 +105,19 @@ class InsertIterator extends Collection
     {
         $row = parent::current();
 
-        if (!$this->_validValues) {
+        if (!$this->validValues) {
             return $row;
         }
 
         $pointer = &$row;
-        foreach ($this->_path as $step) {
+        foreach ($this->path as $step) {
             if (!isset($pointer[$step])) {
                 return $row;
             }
             $pointer = &$pointer[$step];
         }
 
-        $pointer[$this->_target] = $this->_values->current();
+        $pointer[$this->target] = $this->values->current();
 
         return $row;
     }
@@ -130,7 +130,7 @@ class InsertIterator extends Collection
     public function rewind(): void
     {
         parent::rewind();
-        $this->_values->rewind();
-        $this->_validValues = $this->_values->valid();
+        $this->values->rewind();
+        $this->validValues = $this->values->valid();
     }
 }

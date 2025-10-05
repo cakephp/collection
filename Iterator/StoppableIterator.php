@@ -37,14 +37,14 @@ class StoppableIterator extends Collection
      *
      * @var callable
      */
-    protected $_condition;
+    protected $condition;
 
     /**
      * A reference to the internal iterator this object is wrapping.
      *
      * @var \Traversable
      */
-    protected Traversable $_innerIterator;
+    protected Traversable $innerIterator;
 
     /**
      * Creates an iterator that can be stopped based on a condition provided by a callback.
@@ -60,9 +60,9 @@ class StoppableIterator extends Collection
      */
     public function __construct(iterable $items, callable $condition)
     {
-        $this->_condition = $condition;
+        $this->condition = $condition;
         parent::__construct($items);
-        $this->_innerIterator = $this->getInnerIterator();
+        $this->innerIterator = $this->getInnerIterator();
     }
 
     /**
@@ -79,9 +79,9 @@ class StoppableIterator extends Collection
 
         $current = $this->current();
         $key = $this->key();
-        $condition = $this->_condition;
+        $condition = $this->condition;
 
-        return !$condition($current, $key, $this->_innerIterator);
+        return !$condition($current, $key, $this->innerIterator);
     }
 
     /**
@@ -89,7 +89,7 @@ class StoppableIterator extends Collection
      */
     public function unwrap(): Iterator
     {
-        $iterator = $this->_innerIterator;
+        $iterator = $this->innerIterator;
 
         if ($iterator instanceof CollectionInterface) {
             $iterator = $iterator->unwrap();
@@ -102,7 +102,7 @@ class StoppableIterator extends Collection
         // ArrayIterator can be traversed strictly.
         // Let's do that for performance gains
 
-        $callback = $this->_condition;
+        $callback = $this->condition;
         $res = [];
 
         foreach ($iterator as $k => $v) {
