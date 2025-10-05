@@ -33,7 +33,7 @@ class ExtractIterator extends Collection
      *
      * @var callable
      */
-    protected $_extractor;
+    protected $extractor;
 
     /**
      * Creates the iterator that will return the requested property for each value
@@ -58,7 +58,7 @@ class ExtractIterator extends Collection
      */
     public function __construct(iterable $items, callable|string $path)
     {
-        $this->_extractor = $this->propertyExtractor($path);
+        $this->extractor = $this->propertyExtractor($path);
         parent::__construct($items);
     }
 
@@ -70,7 +70,7 @@ class ExtractIterator extends Collection
      */
     public function current(): mixed
     {
-        $extractor = $this->_extractor;
+        $extractor = $this->extractor;
 
         return $extractor(parent::current());
     }
@@ -93,7 +93,7 @@ class ExtractIterator extends Collection
         // ArrayIterator can be traversed strictly.
         // Let's do that for performance gains
 
-        $callback = $this->_extractor;
+        $callback = $this->extractor;
         $res = [];
 
         foreach ($iterator->getArrayCopy() as $k => $v) {

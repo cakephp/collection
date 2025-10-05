@@ -35,35 +35,35 @@ class MapReduce implements IteratorAggregate
      *
      * @var array
      */
-    protected array $_intermediate = [];
+    protected array $intermediate = [];
 
     /**
      * Holds the results as emitted during the reduce phase
      *
      * @var array
      */
-    protected array $_result = [];
+    protected array $result = [];
 
     /**
      * Whether the Map-Reduce routine has been executed already on the data
      *
      * @var bool
      */
-    protected bool $_executed = false;
+    protected bool $executed = false;
 
     /**
      * Holds the original data that needs to be processed
      *
      * @var iterable
      */
-    protected iterable $_data;
+    protected iterable $data;
 
     /**
      * A callable that will be executed for each record in the original data
      *
      * @var callable
      */
-    protected $_mapper;
+    protected $mapper;
 
     /**
      * A callable that will be executed for each intermediate record emitted during
@@ -71,14 +71,14 @@ class MapReduce implements IteratorAggregate
      *
      * @var callable|null
      */
-    protected $_reducer;
+    protected $reducer;
 
     /**
      * Count of elements emitted during the Reduce phase
      *
      * @var int
      */
-    protected int $_counter = 0;
+    protected int $counter = 0;
 
     /**
      * Constructor
@@ -117,9 +117,9 @@ class MapReduce implements IteratorAggregate
      */
     public function __construct(iterable $data, callable $mapper, ?callable $reducer = null)
     {
-        $this->_data = $data;
-        $this->_mapper = $mapper;
-        $this->_reducer = $reducer;
+        $this->data = $data;
+        $this->mapper = $mapper;
+        $this->reducer = $reducer;
     }
 
     /**
@@ -130,11 +130,11 @@ class MapReduce implements IteratorAggregate
      */
     public function getIterator(): Traversable
     {
-        if (!$this->_executed) {
+        if (!$this->executed) {
             $this->execute();
         }
 
-        return new ArrayIterator($this->_result);
+        return new ArrayIterator($this->result);
     }
 
     /**
@@ -149,12 +149,12 @@ class MapReduce implements IteratorAggregate
     public function emitIntermediate(mixed $val, mixed $bucket, mixed $key = null): void
     {
         if ($key === null) {
-            $this->_intermediate[$bucket ?? ''][] = $val;
+            $this->intermediate[$bucket ?? ''][] = $val;
 
             return;
         }
 
-        $this->_intermediate[$bucket][$key] = $val;
+        $this->intermediate[$bucket][$key] = $val;
     }
 
     /**
@@ -167,8 +167,8 @@ class MapReduce implements IteratorAggregate
      */
     public function emit(mixed $val, mixed $key = null): void
     {
-        $this->_result[$key ?? $this->_counter] = $val;
-        $this->_counter++;
+        $this->result[$key ?? $this->counter] = $val;
+        $this->counter++;
     }
 
     /**
@@ -182,22 +182,22 @@ class MapReduce implements IteratorAggregate
      */
     protected function execute(): void
     {
-        $mapper = $this->_mapper;
-        foreach ($this->_data as $key => $val) {
+        $mapper = $this->mapper;
+        foreach ($this->data as $key => $val) {
             $mapper($val, $key, $this);
         }
 
-        if ($this->_intermediate && $this->_reducer === null) {
+        if ($this->intermediate && $this->reducer === null) {
             throw new LogicException('No reducer function was provided');
         }
 
-        $reducer = $this->_reducer;
+        $reducer = $this->reducer;
         if ($reducer !== null) {
-            foreach ($this->_intermediate as $key => $list) {
+            foreach ($this->intermediate as $key => $list) {
                 $reducer($list, $key, $this);
             }
         }
-        $this->_intermediate = [];
-        $this->_executed = true;
+        $this->intermediate = [];
+        $this->executed = true;
     }
 }

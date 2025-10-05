@@ -33,7 +33,7 @@ class NestIterator extends Collection implements RecursiveIterator
      *
      * @var callable|string
      */
-    protected $_nestKey;
+    protected $nestKey;
 
     /**
      * Constructor
@@ -45,7 +45,7 @@ class NestIterator extends Collection implements RecursiveIterator
     public function __construct(iterable $items, callable|string $nestKey)
     {
         parent::__construct($items);
-        $this->_nestKey = $nestKey;
+        $this->nestKey = $nestKey;
     }
 
     /**
@@ -55,9 +55,9 @@ class NestIterator extends Collection implements RecursiveIterator
      */
     public function getChildren(): RecursiveIterator
     {
-        $property = $this->propertyExtractor($this->_nestKey);
+        $property = $this->propertyExtractor($this->nestKey);
 
-        return new static($property($this->current()), $this->_nestKey);
+        return new static($property($this->current()), $this->nestKey);
     }
 
     /**
@@ -68,7 +68,7 @@ class NestIterator extends Collection implements RecursiveIterator
      */
     public function hasChildren(): bool
     {
-        $property = $this->propertyExtractor($this->_nestKey);
+        $property = $this->propertyExtractor($this->nestKey);
         $children = $property($this->current());
 
         if (is_array($children)) {

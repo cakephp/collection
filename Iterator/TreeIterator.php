@@ -37,7 +37,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
      * @var int
      * @phpstan-var \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST
      */
-    protected int $_mode;
+    protected int $mode;
 
     /**
      * Constructor
@@ -54,7 +54,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
         int $flags = 0,
     ) {
         parent::__construct($items, $mode, $flags);
-        $this->_mode = $mode;
+        $this->mode = $mode;
     }
 
     /**
@@ -115,7 +115,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
             $valuePath,
             $keyPath,
             $spacer,
-            $this->_mode,
+            $this->mode,
         );
     }
 }

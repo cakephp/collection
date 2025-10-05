@@ -34,7 +34,7 @@ class FilterIterator extends Collection
      *
      * @var callable
      */
-    protected $_callback;
+    protected $callback;
 
     /**
      * Creates a filtered iterator using the callback to determine which items are
@@ -53,7 +53,7 @@ class FilterIterator extends Collection
             $items = new Collection($items);
         }
 
-        $this->_callback = $callback;
+        $this->callback = $callback;
         $wrapper = new CallbackFilterIterator($items, $callback);
         parent::__construct($wrapper);
     }
@@ -77,7 +77,7 @@ class FilterIterator extends Collection
 
         // ArrayIterator can be traversed strictly.
         // Let's do that for performance gains
-        $callback = $this->_callback;
+        $callback = $this->callback;
         $res = [];
 
         foreach ($iterator as $k => $v) {
