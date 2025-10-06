@@ -854,7 +854,15 @@ trait CollectionTrait
         }
 
         assert(
-            in_array($order, [RecursiveIteratorIterator::LEAVES_ONLY, RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CHILD_FIRST], true),
+            in_array(
+                $order,
+                [
+                    RecursiveIteratorIterator::LEAVES_ONLY,
+                    RecursiveIteratorIterator::SELF_FIRST,
+                    RecursiveIteratorIterator::CHILD_FIRST,
+                ],
+                true,
+            ),
         );
 
         return new TreeIterator(
