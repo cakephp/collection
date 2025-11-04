@@ -29,6 +29,7 @@ use const SORT_NUMERIC;
  * @template TKey
  * @template-covariant TValue
  * @template-extends \Iterator<TKey, TValue>
+ * @method bool any(callable $callback)
  */
 interface CollectionInterface extends Iterator, JsonSerializable, Countable
 {
