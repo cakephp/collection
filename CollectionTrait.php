@@ -1226,7 +1226,9 @@ trait CollectionTrait
     }
 
     /**
-     * @inheritDoc
+     * Returns a new collection containing only the keys of the elements.
+     *
+     * @return \Cake\Collection\CollectionInterface<int, TValue>
      */
     public function keys(): CollectionInterface
     {
@@ -1240,7 +1242,9 @@ trait CollectionTrait
     }
 
     /**
-     * @inheritDoc
+     * Returns a new collection containing only the values, re-indexed with consecutive integers.
+     *
+     * @return \Cake\Collection\CollectionInterface<int, TValue>
      */
     public function values(): CollectionInterface
     {
@@ -1267,7 +1271,9 @@ trait CollectionTrait
     }
 
     /**
-     * @inheritDoc
+     * Applies callback if condition is truthy.
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function when(mixed $condition, callable $callback): CollectionInterface
     {
@@ -1279,7 +1285,9 @@ trait CollectionTrait
     }
 
     /**
-     * @inheritDoc
+     * Applies callback if condition is falsy.
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function unless(mixed $condition, callable $callback): CollectionInterface
     {
